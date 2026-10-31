@@ -162,7 +162,7 @@ jobs:
     name: Build (openSUSE Tumbleweed)
     runs-on: ubuntu-latest
     container:
-      image: opensuse:tumbleweed
+      image: opensuse/tumbleweed
     steps:
       - name: Install dependencies
         run: |
