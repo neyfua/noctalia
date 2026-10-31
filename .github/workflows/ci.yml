@@ -157,3 +157,47 @@ jobs:
         with:
           path: .ccache
           key: ccache-fedora-${{ github.sha }}
+
+  build-opensuse:
+    name: Build (openSUSE Tumbleweed)
+    runs-on: ubuntu-latest
+    container:
+      image: opensuse:tumbleweed
+    steps:
+      - name: Install dependencies
+        run: |
+          zypper in -yl --no-recommends \
+            git meson gcc-c++ just ccache tar zstd \
+            wayland-devel wayland-protocols-devel \
+            Mesa-libEGL-devel Mesa-libGLESv2-devel \
+            freetype2-devel fontconfig-devel \
+            cairo-devel pango-devel harfbuzz-devel \
+            libxkbcommon-devel glib2-devel \
+            libsecret-devel libsodium-devel \
+            sdbus-cpp-devel pipewire-devel wireplumber-devel \
+            pam-devel polkit-devel libcurl-devel libwebp-devel libjxl-devel libsndfile-devel librsvg-devel \
+            libqalculate-devel libxml2-devel \
+            md4c-devel tomlplusplus-devel libical-devel \
+            nlohmann_json-devel stb-devel \
+            jemalloc-devel
+
+      - uses: actions/checkout@v6
+
+      - *ccache-env
+
+      - name: Restore ccache
+        uses: actions/cache/restore@v4
+        with:
+          path: .ccache
+          key: ccache-opensuse-${{ github.sha }}
+          restore-keys: ccache-opensuse-
+
+      - name: Build
+        run: just build
+
+      - name: Save ccache
+        if: github.event_name == 'push'
+        uses: actions/cache/save@v4
+        with:
+          path: .ccache
+          key: ccache-opensuse-${{ github.sha }}
