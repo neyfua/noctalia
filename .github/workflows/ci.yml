@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, opensuse-ci-test]
   pull_request:
 
 # Cancel in-progress runs for the same branch/PR when new commits land.
